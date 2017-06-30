@@ -25,6 +25,7 @@ else:
 
 with open(args.file, 'r') as hosts:
 	hostlist = [line.strip() for line in hosts]
+hosts.close()
 
 for ip in hostlist:
 	output = subprocess.Popen(['ping', '-c', '1', ip],stdout=subprocess.PIPE)
