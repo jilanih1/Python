@@ -8,19 +8,24 @@ class colors():
 	Green = '\033[92m'
 	Reset = '\033[0m'
 
+class info():
+	nofile = 'Please select a file'
+	vafile = ' is a valid file, proceeding...'
+	fafile = 'File not found. Please check filename and path, exiting...'
+ 
 parser = argparse.ArgumentParser(usage='multi-ping -f <file>')
 required = parser.add_argument_group('required arguments')
 required.add_argument('-f', '--file', help='specify the file with full path')
 args = parser.parse_args()
 
 if not args.file:
-	print(colors.Red + 'Please select a file' + colors.Reset + '\n')
+	print(colors.Red + info.nofile + colors.Reset + '\n')
 	sys.exit(1)
 
 if os.path.isfile(args.file):
-	print(colors.Green + args.file + ' is a valid file, proceeding...' + colors.Reset + '\n')
+	print(colors.Green + args.file + info.vafile + colors.Reset + '\n')
 else:
-	print(colors.Red + 'File not found. Please check filename and path, exiting...' + colors.Reset + '\n')
+	print(colors.Red + info.fafile + colors.Reset + '\n')
 	sys.exit(1)
 
 with open(args.file, 'r') as hosts:
