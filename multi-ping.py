@@ -2,9 +2,6 @@
 
 from __future__ import print_function
 import os, sys, subprocess, argparse
-#import sys
-#import subprocess
-#import argparse
 
 class colors(object):
 	Red = '\033[91m'
@@ -18,7 +15,6 @@ args = parser.parse_args()
 
 if not args.file:
 	print(colors.Red + 'Please select a file' + colors.Reset + '\n')
-#	parser.print_help()
 	sys.exit(1)
 
 if os.path.isfile(args.file):
