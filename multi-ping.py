@@ -3,7 +3,7 @@
 from __future__ import print_function
 import os, sys, subprocess, argparse
 
-class colors(object):
+class colors():
 	Red = '\033[91m'
 	Green = '\033[92m'
 	Reset = '\033[0m'
