@@ -12,6 +12,8 @@ class info():
 	nofile = 'Please select a file'
 	vafile = ' is a valid file, proceeding...'
 	fafile = 'File not found. Please check filename and path, exiting...'
+	success = ' is pingable'
+	fail = ' is not pingable'
  
 parser = argparse.ArgumentParser(usage='multi-ping -f <file>')
 required = parser.add_argument_group('required arguments')
@@ -37,9 +39,9 @@ for ip in hostlist:
 	stdout, stderr = output.communicate()
 
 	if output.returncode == 0:
-		print(colors.Green + ip + ' is pingable' + colors.Reset)
+		print(colors.Green + ip + info.success + colors.Reset)
 	else:
-		print(colors.Red + ip + ' is NOT pingable' + colors.Reset)
+		print(colors.Red + ip + info.fail + colors.Reset)
 
 print('\n')
 sys.exit(0)
