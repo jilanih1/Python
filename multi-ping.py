@@ -52,3 +52,9 @@ for ip in hostlist:
 
 print('\n')
 sys.exit(0)
+
+### NOTE: Hosts should be listed in the file as following (Without #) ###
+#Host1
+#Host2
+#Host3
+#Etc.
