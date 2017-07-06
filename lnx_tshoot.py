@@ -6,7 +6,7 @@ from __future__ import print_function
 import argparse, paramiko, sys, getpass, subprocess
 
 ### for testing ###
-hostname = '192.168.1.39'
+hostname = '192.168.1.43'
 username = 'root'
 password = getpass.getpass('Please enter password: ')
 command = 'uptime'
@@ -16,7 +16,17 @@ command = 'uptime'
 ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
-# Class for colors.
+class colors():
+	red = '\033[91m'
+	blu = '\033[94m'
+	grn = '\033[92m'
+	rst = '\033[0m'
+
+class commands():
+	uptm = 'uptime'
+	free = 'free'
+#	proc = 'ps -ef | grep -i ' + variable + ' | grep -v grep'
+#	varm = 'grep -i ' + variable2 + ' /var/log/messages'
 
 # Define a function for commands menu:
 options = ['Check system uptime.', 'Check free memory.', 'Check if a process is running.',
@@ -31,7 +41,7 @@ def connect():
 	ssh.connect(hostname, port=22, username=username, password=password)
 
 def execute():
-	stdin,stdout,stderr = ssh.exec_command(command)
+	stdin,stdout,stderr = ssh.exec_command(commands.uptm)
 	type(stdin)
 	print(stdout.read())
 
