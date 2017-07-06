@@ -5,8 +5,16 @@
 from __future__ import print_function
 import argparse, paramiko, sys, getpass, subprocess
 
+### for testing ###
+hostname = '192.168.1.39'
+username = 'root'
+password = getpass.getpass('Please enter password: ')
+command = 'uptime'
+###################
+
 # Global variables.
-# paramiko
+ssh = paramiko.SSHClient()
+ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
 # Class for colors.
 
@@ -17,10 +25,18 @@ def menu():
 	print('Select from the following options [1-5]: ')
 	for number,option in enumerate(options, 1):
 		print(number, option)
-menu()
 
-# Define ssh function.
+# Define ssh & exec functions.
+def connect():
+	ssh.connect(hostname, port=22, username=username, password=password)
 
+def execute():
+	stdin,stdout,stderr = ssh.exec_command(command)
+	type(stdin)
+	print(stdout.read())
+
+connect()
+execute()
 # Add options for hostname and username.
 # raw_inputs for if no option is selected.
 # getpass to enter password.
