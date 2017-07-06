@@ -28,7 +28,7 @@ class commands():
 #	proc = 'ps -ef | grep -i ' + variable + ' | grep -v grep'
 #	varm = 'grep -i ' + variable2 + ' /var/log/messages'
 
-# Define a function for commands menu:
+# Defines a function for commands menu:
 options = ['Check system uptime.', 'Check free memory.', 'Check if a process is running.',
 	 'Check for a string in /var/log/messages.', 'EXIT']
 def menu():
@@ -38,11 +38,9 @@ def menu():
 		print(number, option)
 	print('_' * 42)
 
-# Define ssh & exec functions.
-def connect():
-	ssh.connect(hostname, port=22, username=username, password=password)
-
+# Defines exec function.
 def execute():
+	print(command)
 	stdin,stdout,stderr = ssh.exec_command(command)
 	type(stdin)
 	print(stdout.read())
@@ -56,14 +54,13 @@ stdout, stderr = pinghost.communicate()
 if pinghost.returncode == 0:
 	print('' + hostname + ' is pingable, continuing...')
 	try:
-		connect()
+		ssh.connect(hostname, port=22, username=username, password=password)
 		while True:
 			menu()
 			try:
 				choice = int(input('Please select an option [1-5]: '))
 				if choice == 1:
 					command = commands.uptm
-					print(command)
 					execute()
 				elif choice >1 and choice<5:
 					print('Option not yet coded.')
