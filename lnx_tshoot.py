@@ -9,14 +9,12 @@ import argparse, paramiko, sys, getpass, subprocess
 hostname = '192.168.1.43'
 username = 'root'
 password = getpass.getpass('Please enter password: ')
-command = 'uptime'
 
 ### To do: ###
 # Add options for hostname and username.
 # raw_inputs for if no option is selected.
 # Add colors
 
-# Global variables.
 ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
