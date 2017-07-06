@@ -1,20 +1,23 @@
+#!/usr/bin/env python
 #Linux Troubleshooting script - run basic Linux commands via python script
 
-### Pseudocode ###
-
 # Modules
+from __future__ import print_function
+import argparse, paramiko, sys, getpass, subprocess
 
 # Global variables.
 # paramiko
 
 # Class for colors.
 
-# Define a function for command menu:
-	# 1. Check system uptime.
-	# 2. Check free memory.
-	# 3. Check if a process is running.
-	# 4. Check for a string in /var/log/messages.
-	# 5. Exit.
+# Define a function for commands menu:
+options = ['Check system uptime.', 'Check free memory.', 'Check if a process is running.',
+	 'Check for a string in /var/log/messages.', 'EXIT']
+def menu():
+	print('Select from the following options [1-5]: ')
+	for number,option in enumerate(options, 1):
+		print(number, option)
+menu()
 
 # Define ssh function.
 
