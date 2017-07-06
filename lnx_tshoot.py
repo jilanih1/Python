@@ -5,12 +5,16 @@
 from __future__ import print_function
 import argparse, paramiko, sys, getpass, subprocess
 
-### for testing ###
+### for testing: ###
 hostname = '192.168.1.43'
 username = 'root'
 password = getpass.getpass('Please enter password: ')
 command = 'uptime'
-###################
+
+### To do: ###
+# Add options for hostname and username.
+# raw_inputs for if no option is selected.
+# Add colors
 
 # Global variables.
 ssh = paramiko.SSHClient()
@@ -25,8 +29,8 @@ class colors():
 class commands():
 	uptm = 'uptime'
 	free = 'free'
-#	proc = 'ps -ef | grep -i ' + variable + ' | grep -v grep'
-#	varm = 'grep -i ' + variable2 + ' /var/log/messages'
+	proc = 'ps -ef | grep -v grep | grep -i '
+	varm = 'cat /var/log/messages | grep -i '
 
 # Defines a function for commands menu:
 options = ['Check system uptime.', 'Check free memory.', 'Check if a process is running.',
@@ -45,8 +49,6 @@ def execute():
 	type(stdin)
 	print(stdout.read())
 
-# Add options for hostname and username.
-# raw_inputs for if no option is selected.
 
 # if/else statement to ping the host
 pinghost = subprocess.Popen(['ping', '-c', '1', hostname],stdout=subprocess.PIPE)
@@ -62,10 +64,20 @@ if pinghost.returncode == 0:
 				if choice == 1:
 					command = commands.uptm
 					execute()
-				elif choice >1 and choice<5:
-					print('Option not yet coded.')
+				elif choice == 2:
+					command = commands.free
+					execute()
+				elif choice == 3:
+					var = raw_input('Please enter process: ')
+					command = commands.proc + var
+					execute()
+				elif choice == 4:
+					var = raw_input('Please enter string: ')
+					command = commands.varm + var
+					execute()
 				elif choice == 5:
 					print('Exiting...')
+					ssh.close()
 					sys.exit(0)
 				else:
 					print('Invalid option selcted.')
@@ -73,10 +85,11 @@ if pinghost.returncode == 0:
 				print('Invalid option selected.')
 			except (TypeError):
 				print('Please enter option "5" to exit.')
-
 	except paramiko.AuthenticationException:
 		print('Authentication Failed: Please check username and password.')
 	except paramiko.ssh_exception.NoValidConnectionsError:
 		print('Connection Refused: Unable to connect to port 22 on ' + hostname)
 else:
 	print('' + hostname + ' is not pingable, please check network connectivity.')
+
+sys.exit(0)
