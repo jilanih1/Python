@@ -34,10 +34,10 @@ class commands():
 options = ['Check system uptime.', 'Check free memory.', 'Check if a process is running.',
 	 'Check for a string in /var/log/messages.']
 def menu():
-	print('-' * 50)
+	print('-' * 46)
 	for number,option in enumerate(options, 1):
 		print(number, option)
-	print('-' * 50)
+	print('-' * 46)
 
 # Defines exec function.
 def execute():
@@ -46,6 +46,11 @@ def execute():
 	type(stdin)
 	print(stdout.read())
 
+# Defines exit function.
+def close():
+	print('Exiting...')
+	ssh.close()
+	sys.exit()
 
 # if/else statement to ping the host
 pinghost = subprocess.Popen(['ping', '-c', '1', hostname],stdout=subprocess.PIPE)
@@ -64,10 +69,16 @@ if pinghost.returncode == 0:
 					command = commands.free
 				elif choice == 3:
 					var = raw_input('Please enter process: ')
-					command = commands.proc + var
+					if var == 'quit' or 'exit':
+						close()
+					else:
+						command = commands.proc + var
 				elif choice == 4:
 					var = raw_input('Please enter string: ')
-					command = commands.varm + var
+					if var == 'quit' or 'exit':
+						close()
+					else:
+						command = commands.varm + var
 				else:
 					command = null
 					print('Invalid option selcted.')
@@ -75,9 +86,7 @@ if pinghost.returncode == 0:
 			except (NameError, SyntaxError):
 				print('Invalid option selected.')
 			except (TypeError):
-				print('Exiting...')
-				ssh.close()
-				sys.exit(0)
+				close()
 	except paramiko.AuthenticationException:
 		print('Authentication Failed: Please check username and password.')
 	except paramiko.ssh_exception.NoValidConnectionsError:
