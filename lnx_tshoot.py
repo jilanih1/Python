@@ -6,7 +6,7 @@ from __future__ import print_function
 import argparse, paramiko, sys, getpass, subprocess
 
 ### for testing: ###
-hostname = '192.168.1.43'
+hostname = '192.168.1.48'
 username = 'root'
 password = getpass.getpass('Please enter password: ')
 
@@ -32,13 +32,12 @@ class commands():
 
 # Defines a function for commands menu:
 options = ['Check system uptime.', 'Check free memory.', 'Check if a process is running.',
-	 'Check for a string in /var/log/messages.', 'EXIT']
+	 'Check for a string in /var/log/messages.']
 def menu():
-	print('_' * 42)
-	print('Select from the following options [1-5]: ')
+	print('-' * 50)
 	for number,option in enumerate(options, 1):
 		print(number, option)
-	print('_' * 42)
+	print('-' * 50)
 
 # Defines exec function.
 def execute():
@@ -58,31 +57,27 @@ if pinghost.returncode == 0:
 		while True:
 			menu()
 			try:
-				choice = int(input('Please select an option [1-5]: '))
+				choice = int(input('Select an options [1-4] or type "exit": '))
 				if choice == 1:
 					command = commands.uptm
-					execute()
 				elif choice == 2:
 					command = commands.free
-					execute()
 				elif choice == 3:
 					var = raw_input('Please enter process: ')
 					command = commands.proc + var
-					execute()
 				elif choice == 4:
 					var = raw_input('Please enter string: ')
 					command = commands.varm + var
-					execute()
-				elif choice == 5:
-					print('Exiting...')
-					ssh.close()
-					sys.exit(0)
 				else:
+					command = null
 					print('Invalid option selcted.')
+				execute()
 			except (NameError, SyntaxError):
 				print('Invalid option selected.')
 			except (TypeError):
-				print('Please enter option "5" to exit.')
+				print('Exiting...')
+				ssh.close()
+				sys.exit(0)
 	except paramiko.AuthenticationException:
 		print('Authentication Failed: Please check username and password.')
 	except paramiko.ssh_exception.NoValidConnectionsError:
