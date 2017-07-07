@@ -57,7 +57,7 @@ if pinghost.returncode == 0:
 		while True:
 			menu()
 			try:
-				choice = int(input('Select an options [1-4] or type "exit": '))
+				choice = int(input('Select an option [1-4] or type "exit": '))
 				if choice == 1:
 					command = commands.uptm
 				elif choice == 2:
