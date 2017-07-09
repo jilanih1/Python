@@ -82,7 +82,7 @@ ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 pinghost = subprocess.Popen(['ping', '-c', '1', hostname],stdout=subprocess.PIPE)
 stdout, stderr = pinghost.communicate()
 if pinghost.returncode == 0:
-	print(colors.red +  hostname + messages.sping)
+	print(colors.red + hostname + messages.sping)
 	try:
 		ssh.connect(hostname, port=22, username=username, password=password)
 		while True:
