@@ -5,6 +5,10 @@
 from __future__ import print_function
 import argparse, paramiko, sys, getpass, subprocess
 
+#For paramiko (ssh/missing keys)
+ssh = paramiko.SSHClient()
+ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
 #Classes for colors, messages and commands
 class colors():
 	red = '\033[91m'
@@ -32,26 +36,6 @@ class commands():
 	proc = 'ps -ef | grep -v grep | grep -i '
 	varm = 'cat /var/log/messages | grep -i '
 
-#Defines functions to call menu, execute the code, and exit script:
-options = ['Check system uptime.', 'Check free memory.', 'Check if a process is running.',
-	 'Check for a string in /var/log/messages.']
-def menu():
-	print(colors.blu + '-' * 46)
-	for number,option in enumerate(options, 1):
-		print(number, option)
-	print('-' * 46 + colors.rst)
-
-def execute():
-	print(colors.blu + command + colors.rst)
-	stdin,stdout,stderr = ssh.exec_command(command)
-	type(stdin)
-	print(colors.cyn + stdout.read() + colors.rst)
-
-def close():
-	print(messages.extng)
-	ssh.close()
-	sys.exit()
-
 #Allows script to be run with hostname and username options:
 parser = argparse.ArgumentParser(usage='lnx_tshoot.py -s <hostname> -u <username>')
 parser.add_argument('-s', '--hostname', help='Specify hostname to ssh into.')
@@ -71,9 +55,25 @@ else:
 #Hides password entry:
 password = getpass.getpass(colors.blu + '' + username + '@' + hostname + ' password: ' + colors.rst)
 
-#For paramiko (ssh/missing keys)
-ssh = paramiko.SSHClient()
-ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+#Defines functions to call menu, exit the script and execute the code:
+options = ['Check system uptime.', 'Check free memory.', 'Check if a process is running.',
+	 'Check for a string in /var/log/messages.']
+def menu():
+	print(colors.blu + '-' * 46)
+	for number,option in enumerate(options, 1):
+		print(number, option)
+	print('-' * 46 + colors.rst)
+
+def close():
+	print(messages.extng)
+	ssh.close()
+	sys.exit()
+
+def execute():
+	print(colors.blu + command + colors.rst)
+	stdin,stdout,stderr = ssh.exec_command(command)
+	type(stdin)
+	print(colors.cyn + stdout.read() + colors.rst)
 
 #If host is pingable, tries to connect to host. Displays the menu.
 #Lets the user choose a command to run.
@@ -113,5 +113,4 @@ if pinghost.returncode == 0:
 		print(messages.confl + colors.red + hostname + colors.rst)
 else:
 	print(colors.red + hostname + messages.fping)
-
 close()
