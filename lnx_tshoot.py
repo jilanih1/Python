@@ -17,8 +17,8 @@ class messages():
 	nohst = colors.blu + 'no hostname specified, please enter hostname: ' + colors.rst
 	nousr = colors.blu + 'no username specified, please enter username: ' + colors.rst
 	selct = colors.blu + 'Select an option [1-4] or type "exit": ' + colors.rst
-	sping = colors.ylw + 'is pingable, continuing...' + colors.rst
-	fping = colors.ylw + 'is not pingable, please check network connectivity.' + colors.rst
+	sping = colors.ylw + ' is pingable, continuing...' + colors.rst
+	fping = colors.ylw + ' is not pingable, please check network connectivity.' + colors.rst
 	prcin = colors.blu + 'Please enter process: ' + colors.rst
 	varin = colors.blu + 'Please enter string to search: ' + colors.rst
 	invld = colors.red + 'Invalid option selected.' + colors.rst
@@ -82,7 +82,7 @@ ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 pinghost = subprocess.Popen(['ping', '-c', '1', hostname],stdout=subprocess.PIPE)
 stdout, stderr = pinghost.communicate()
 if pinghost.returncode == 0:
-	print(colors.red, hostname, messages.sping)
+	print(colors.red +  hostname + messages.sping)
 	try:
 		ssh.connect(hostname, port=22, username=username, password=password)
 		while True:
@@ -112,6 +112,6 @@ if pinghost.returncode == 0:
 	except paramiko.ssh_exception.NoValidConnectionsError:
 		print(messages.confl + colors.red + hostname + colors.rst)
 else:
-	print(colors.red, hostname, messages.fping)
+	print(colors.red + hostname + messages.fping)
 
 close()
