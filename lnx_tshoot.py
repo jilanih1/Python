@@ -5,15 +5,20 @@
 from __future__ import print_function
 import argparse, paramiko, sys, getpass, subprocess
 
-### for testing: ###
-hostname = '192.168.1.48'
-username = 'root'
-password = getpass.getpass('Please enter password: ')
+parser = argparse.ArgumentParser(usage='lnx_tshoot.py -s <hostname> -u <username>')
+parser.add_argument('-s', '--hostname', help='Specify hostname to ssh into.')
+parser.add_argument('-u', '--username', help='Enter username.')
+args = parser.parse_args()
 
-### To do: ###
-# Add options for hostname and username.
-# raw_inputs for if no option is selected.
-# Add colors
+if not args.hostname:
+	hostname = raw_input('no hostname specified, please enter hostname: ')
+else:
+	hostname = args.hostname
+if not args.username:
+	username = raw_input('no username specified, please enter username: ')
+else:
+	username = args.username	
+password = getpass.getpass('' + username + '@' + hostname + ' password: ')
 
 ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -21,6 +26,7 @@ ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 class colors():
 	red = '\033[91m'
 	blu = '\033[94m'
+	cyn = '\033[96m'
 	grn = '\033[92m'
 	rst = '\033[0m'
 
@@ -69,16 +75,10 @@ if pinghost.returncode == 0:
 					command = commands.free
 				elif choice == 3:
 					var = raw_input('Please enter process: ')
-					if var == 'quit' or 'exit':
-						close()
-					else:
-						command = commands.proc + var
+					command = commands.proc + var
 				elif choice == 4:
 					var = raw_input('Please enter string: ')
-					if var == 'quit' or 'exit':
-						close()
-					else:
-						command = commands.varm + var
+					command = commands.varm + var
 				else:
 					command = null
 					print('Invalid option selcted.')
