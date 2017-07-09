@@ -76,9 +76,9 @@ ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
 #If host is pingable, tries to connect to host. Displays the menu.
-#Lets the user choose a command to run
+#Lets the user choose a command to run.
 #If the incorrect password is entered or sshd service is not running paramiko throws
-# exceptions and an error messages is displayed.
+# exceptions and error messages is displayed.
 pinghost = subprocess.Popen(['ping', '-c', '1', hostname],stdout=subprocess.PIPE)
 stdout, stderr = pinghost.communicate()
 if pinghost.returncode == 0:
