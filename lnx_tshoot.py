@@ -36,6 +36,64 @@ class commands():
 	proc = 'ps -ef | grep -v grep | grep -i '
 	varm = 'cat /var/log/messages | grep -i '
 
+#Defines functions to call menu and exit:
+options = ['Check system uptime.', 'Check free memory.', 'Check if a process is running.',
+	 'Check for a string in /var/log/messages.']
+def menu():
+	print(colors.blu + '-' * 46)
+	for number,option in enumerate(options, 1):
+		print(number, option)
+	print('-' * 46 + colors.rst)
+
+def close():
+	print(messages.extng)
+	ssh.close()
+	sys.exit()
+
+#Defines main function:
+#If host is pingable, tries to connect to host. Displays the menu.
+#Lets the user choose a command to run.
+#If the incorrect password is entered or sshd service is not running paramiko throws
+# exceptions and error messages are displayed.
+def main():
+	pinghost = subprocess.Popen(['ping', '-c', '1', hostname],stdout=subprocess.PIPE)
+	stdout, stderr = pinghost.communicate()
+	if pinghost.returncode == 0:
+		print(colors.red + hostname + messages.sping)
+		try:
+			ssh.connect(hostname, port=22, username=username, password=password)
+			while True:
+				menu()
+				try:
+					choice = int(input(messages.selct))
+					if choice == 1:
+						command = commands.uptm
+					elif choice == 2:
+						command = commands.free
+					elif choice == 3:
+						var = raw_input(messages.prcin)
+						command = commands.proc + var
+					elif choice == 4:
+						var = raw_input(messages.varin)
+						command = commands.varm + var
+					else:
+						command = null
+						print(messages.invld)
+					print(colors.blu + command + colors.rst)
+					stdin,stdout,stderr = ssh.exec_command(command)
+					type(stdin)
+					print(colors.cyn + stdout.read() + colors.rst)
+				except (NameError, SyntaxError):
+					print(messages.invld)
+				except (TypeError):
+					close()
+		except paramiko.AuthenticationException:
+			print(messages.autfl)
+		except paramiko.ssh_exception.NoValidConnectionsError:
+			print(messages.confl + colors.red + hostname + colors.rst)
+	else:
+		print(colors.red + hostname + messages.fping)
+
 #Allows script to be run with hostname and username options:
 parser = argparse.ArgumentParser(usage='lnx_tshoot.py -s <hostname> -u <username>')
 parser.add_argument('-s', '--hostname', help='Specify hostname to ssh into.')
@@ -55,62 +113,6 @@ else:
 #Hides password entry:
 password = getpass.getpass(colors.blu + '' + username + '@' + hostname + ' password: ' + colors.rst)
 
-#Defines functions to call menu, exit the script and execute the code:
-options = ['Check system uptime.', 'Check free memory.', 'Check if a process is running.',
-	 'Check for a string in /var/log/messages.']
-def menu():
-	print(colors.blu + '-' * 46)
-	for number,option in enumerate(options, 1):
-		print(number, option)
-	print('-' * 46 + colors.rst)
-
-def close():
-	print(messages.extng)
-	ssh.close()
-	sys.exit()
-
-def execute():
-	print(colors.blu + command + colors.rst)
-	stdin,stdout,stderr = ssh.exec_command(command)
-	type(stdin)
-	print(colors.cyn + stdout.read() + colors.rst)
-
-#If host is pingable, tries to connect to host. Displays the menu.
-#Lets the user choose a command to run.
-#If the incorrect password is entered or sshd service is not running paramiko throws
-# exceptions and error messages are displayed.
-pinghost = subprocess.Popen(['ping', '-c', '1', hostname],stdout=subprocess.PIPE)
-stdout, stderr = pinghost.communicate()
-if pinghost.returncode == 0:
-	print(colors.red + hostname + messages.sping)
-	try:
-		ssh.connect(hostname, port=22, username=username, password=password)
-		while True:
-			menu()
-			try:
-				choice = int(input(messages.selct))
-				if choice == 1:
-					command = commands.uptm
-				elif choice == 2:
-					command = commands.free
-				elif choice == 3:
-					var = raw_input(messages.prcin)
-					command = commands.proc + var
-				elif choice == 4:
-					var = raw_input(messages.varin)
-					command = commands.varm + var
-				else:
-					command = null
-					print(messages.invld)
-				execute()
-			except (NameError, SyntaxError):
-				print(messages.invld)
-			except (TypeError):
-				close()
-	except paramiko.AuthenticationException:
-		print(messages.autfl)
-	except paramiko.ssh_exception.NoValidConnectionsError:
-		print(messages.confl + colors.red + hostname + colors.rst)
-else:
-	print(colors.red + hostname + messages.fping)
+if __name__ == '__main__':
+	main()
 close()
