@@ -34,7 +34,8 @@ class messages():
 
 class commands():
 	sysi = 'dmidecode -t system'
-	lnxk = 'uname -a'
+	lnxk = 'uname -r'
+	osvr = 'cat /etc/*-release | (head -n1)'
 	uptm = 'uptime'
 	free = 'free'
 	neti = 'ifconfig'
@@ -44,9 +45,9 @@ class commands():
 	pngh = 'ping -c3 '
 
 #Defines functions to call menu and exit:
-options = ['Show System Information.', 'Show Linux Kernel', 'Show System Uptime.', 'Show Memory Usage.',
-	'Show Network Interfaces.', 'Check Process:', 'Check for a string in /var/log/messages:', 
-	'Trace Address:', 'Ping Address:']
+options = ['Show System Information.', 'Show Linux Kernel.', 'Show OS Version.', 'Show System Uptime.', 
+	'Show Memory Usage.', 'Show Network Interfaces.', 'Check Process:', 
+	'Check for a string in /var/log/messages:', 'Trace Address:', 'Ping Address:']
 def menu():
 	print(colors.blu + '-' * 46)
 	for number,option in enumerate(options, 1):
@@ -79,21 +80,23 @@ def main():
 					elif choice == 2:
 						command = commands.lnxk
 					elif choice == 3:
-						command = commands.uptm
+						command = commands.osvr
 					elif choice == 4:
-						command = commands.free
+						command = commands.uptm
 					elif choice == 5:
-						command = commands.neti
+						command = commands.free
 					elif choice == 6:
+						command = commands.neti
+					elif choice == 7:
 						var = raw_input(messages.prcin)
 						command = commands.proc + var
-					elif choice == 7:
+					elif choice == 8:
 						var = raw_input(messages.varin)
 						command = commands.varm + var
-					elif choice == 8:
+					elif choice == 9:
 						var = raw_input(messages.trcin)
 						command = commands.trcr + var
-					elif choice == 9:
+					elif choice == 10:
 						var = raw_input(messages.pngin)
 						command = commands.pngh + var
 					else:
@@ -120,7 +123,7 @@ parser.add_argument('-s', '--hostname', help='Specify hostname to ssh into.')
 parser.add_argument('-u', '--username', help='Enter username.')
 args = parser.parse_args()
 
-#If no option is selected for hostname and username, allows it to be entered:
+#If no option is selected for hostname and username, allows it to be entered via input:
 if not args.hostname:
 	hostname = raw_input(messages.nohst)
 else:
@@ -130,7 +133,7 @@ if not args.username:
 else:
 	username = args.username
 
-#Hides password entry:
+#Hides password input:
 password = getpass.getpass(colors.blu + '' + username + '@' + hostname + ' password: ' + colors.rst)
 
 if __name__ == '__main__':
