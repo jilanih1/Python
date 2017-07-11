@@ -20,7 +20,7 @@ class colors():
 class messages():
 	nohst = colors.blu + 'no hostname specified, please enter hostname: ' + colors.rst
 	nousr = colors.blu + 'no username specified, please enter username: ' + colors.rst
-	selct = colors.blu + 'Select an option [1-4] or type "exit": ' + colors.rst
+	selct = colors.blu + 'Select an option [1-10] or type "exit": ' + colors.rst
 	sping = colors.ylw + ' is pingable, continuing...' + colors.rst
 	fping = colors.ylw + ' is not pingable, please check network connectivity.' + colors.rst
 	prcin = colors.blu + 'Please enter process: ' + colors.rst
