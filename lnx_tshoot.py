@@ -31,14 +31,17 @@ class messages():
 	confl = colors.ylw + 'Connection Refused: Unable to connect to port 22 on ' + colors.rst
 
 class commands():
+	sysi = 'dmidecode -t system'
+	lnxk = 'uname -a'
 	uptm = 'uptime'
 	free = 'free'
+	neti = 'ifconfig'
 	proc = 'ps -ef | grep -v grep | grep -i '
 	varm = 'cat /var/log/messages | grep -i '
 
 #Defines functions to call menu and exit:
-options = ['Check system uptime.', 'Check free memory.', 'Check if a process is running.',
-	 'Check for a string in /var/log/messages.']
+options = ['Show System Information.', 'Show Linux Kernel', 'Show System Uptime.', 'Show Memory Usage.',
+	'Show Network Interfaces.', 'Check Process.', 'Check for a string in /var/log/messages.']
 def menu():
 	print(colors.blu + '-' * 46)
 	for number,option in enumerate(options, 1):
@@ -67,13 +70,19 @@ def main():
 				try:
 					choice = int(input(messages.selct))
 					if choice == 1:
-						command = commands.uptm
+						command = commands.sysi
 					elif choice == 2:
-						command = commands.free
+						command = commands.lnxk
 					elif choice == 3:
+						command = commands.uptm
+					elif choice == 4:
+						command = commands.free
+					elif choice == 5:
+						command = commands.neti
+					elif choice == 6:
 						var = raw_input(messages.prcin)
 						command = commands.proc + var
-					elif choice == 4:
+					elif choice == 7:
 						var = raw_input(messages.varin)
 						command = commands.varm + var
 					else:
