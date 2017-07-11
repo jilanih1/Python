@@ -3,7 +3,7 @@
 
 # Modules
 from __future__ import print_function
-import argparse, paramiko, sys, getpass, subprocess
+import argparse, paramiko, sys, getpass, subprocess, os
 
 #For paramiko (ssh/missing keys)
 ssh = paramiko.SSHClient()
@@ -27,7 +27,7 @@ class messages():
 	varin = colors.blu + 'Please enter string to search: ' + colors.rst
 	trcin = colors.blu + 'Please enter address to trace: ' + colors.rst
 	pngin = colors.blu + 'Please enter address to ping: ' + colors.rst
-	invld = colors.red + 'Invalid option selected.' + colors.rst
+	invld = colors.red + 'Invalid option selected. Please choose from the following:' + colors.rst
 	extng = colors.ylw + 'Exiting...' + colors.rst
 	autfl = colors.ylw + 'Authentication Failed: Please check username and password.' + colors.rst
 	confl = colors.ylw + 'Connection Refused: Unable to connect to port 22 on ' + colors.rst
@@ -53,6 +53,9 @@ def menu():
 	for number,option in enumerate(options, 1):
 		print(number, option)
 	print('-' * 46 + colors.rst)
+
+def clear():
+	os.system('clear')
 
 def close():
 	print(messages.extng)
@@ -100,13 +103,16 @@ def main():
 						var = raw_input(messages.pngin)
 						command = commands.pngh + var
 					else:
+						clear()
 						command = null
 						print(messages.invld)
+					clear()
 					print(colors.red + 'Linux Command: ' + colors.blu + command + colors.rst)
 					stdin,stdout,stderr = ssh.exec_command(command)
 					type(stdin)
 					print(colors.cyn + stdout.read() + colors.rst)
 				except (NameError, SyntaxError):
+					clear()
 					print(messages.invld)
 				except (TypeError):
 					close()
