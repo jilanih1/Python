@@ -25,6 +25,8 @@ class messages():
 	fping = colors.ylw + ' is not pingable, please check network connectivity.' + colors.rst
 	prcin = colors.blu + 'Please enter process: ' + colors.rst
 	varin = colors.blu + 'Please enter string to search: ' + colors.rst
+	trcin = colors.blu + 'Please enter address to trace: ' + colors.rst
+	pngin = colors.blu + 'Please enter address to ping: ' + colors.rst
 	invld = colors.red + 'Invalid option selected.' + colors.rst
 	extng = colors.ylw + 'Exiting...' + colors.rst
 	autfl = colors.ylw + 'Authentication Failed: Please check username and password.' + colors.rst
@@ -38,10 +40,13 @@ class commands():
 	neti = 'ifconfig'
 	proc = 'ps -ef | grep -v grep | grep -i '
 	varm = 'cat /var/log/messages | grep -i '
+	trcr = 'traceroute '
+	pngh = 'ping -c3 '
 
 #Defines functions to call menu and exit:
 options = ['Show System Information.', 'Show Linux Kernel', 'Show System Uptime.', 'Show Memory Usage.',
-	'Show Network Interfaces.', 'Check Process.', 'Check for a string in /var/log/messages.']
+	'Show Network Interfaces.', 'Check Process:', 'Check for a string in /var/log/messages:', 
+	'Trace Address:', 'Ping Address:']
 def menu():
 	print(colors.blu + '-' * 46)
 	for number,option in enumerate(options, 1):
@@ -59,7 +64,7 @@ def close():
 #If the incorrect password is entered or sshd service is not running paramiko throws
 # exceptions and error messages are displayed.
 def main():
-	pinghost = subprocess.Popen(['ping', '-c', '1', hostname],stdout=subprocess.PIPE)
+	pinghost = subprocess.Popen(['ping', '-c', '3', hostname],stdout=subprocess.PIPE)
 	stdout, stderr = pinghost.communicate()
 	if pinghost.returncode == 0:
 		print(colors.red + hostname + messages.sping)
@@ -85,10 +90,16 @@ def main():
 					elif choice == 7:
 						var = raw_input(messages.varin)
 						command = commands.varm + var
+					elif choice == 8:
+						var = raw_input(messages.trcin)
+						command = commands.trcr + var
+					elif choice == 9:
+						var = raw_input(messages.pngin)
+						command = commands.pngh + var
 					else:
 						command = null
 						print(messages.invld)
-					print(colors.blu + command + colors.rst)
+					print(colors.red + 'Linux Command: ' + colors.blu + command + colors.rst)
 					stdin,stdout,stderr = ssh.exec_command(command)
 					type(stdin)
 					print(colors.cyn + stdout.read() + colors.rst)
