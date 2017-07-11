@@ -3,7 +3,7 @@
 
 # Modules
 from __future__ import print_function
-import argparse, paramiko, sys, getpass, subprocess, os
+import argparse, paramiko, sys, getpass, subprocess, os, time
 
 #For paramiko (ssh/missing keys)
 ssh = paramiko.SSHClient()
@@ -44,11 +44,12 @@ class commands():
 	trcr = 'traceroute '
 	pngh = 'ping -c3 '
 
-#Defines functions to call menu and exit:
+#Defines functions to call menu, clear screen & exit:
 options = ['Show System Information.', 'Show Linux Kernel Version.', 'Show OS Version.', 'Show System Uptime.', 
 	'Show Memory Usage.', 'Show Network Interfaces.', 'Check Process:', 
 	'Check for a string in /var/log/messages:', 'Trace Address:', 'Ping Address:']
 def menu():
+	time.sleep(1)
 	print(colors.blu + '-' * 46)
 	for number,option in enumerate(options, 1):
 		print(number, option)
@@ -59,6 +60,7 @@ def clear():
 
 def close():
 	print(messages.extng)
+	time.sleep(1)
 	ssh.close()
 	sys.exit()
 
@@ -115,6 +117,7 @@ def main():
 					clear()
 					print(messages.invld)
 				except (TypeError):
+					clear()
 					close()
 		except paramiko.AuthenticationException:
 			print(messages.autfl)
