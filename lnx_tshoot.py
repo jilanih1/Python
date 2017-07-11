@@ -45,7 +45,7 @@ class commands():
 	pngh = 'ping -c3 '
 
 #Defines functions to call menu and exit:
-options = ['Show System Information.', 'Show Linux Kernel.', 'Show OS Version.', 'Show System Uptime.', 
+options = ['Show System Information.', 'Show Linux Kernel Version.', 'Show OS Version.', 'Show System Uptime.', 
 	'Show Memory Usage.', 'Show Network Interfaces.', 'Check Process:', 
 	'Check for a string in /var/log/messages:', 'Trace Address:', 'Ping Address:']
 def menu():
