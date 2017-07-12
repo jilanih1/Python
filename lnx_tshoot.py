@@ -28,7 +28,7 @@ class messages():
 	trcin = colors.blu + 'Please enter address to trace: ' + colors.rst
 	pngin = colors.blu + 'Please enter address to ping: ' + colors.rst
 	invld = colors.red + 'Invalid option selected. Please choose from the following:' + colors.rst
-	extng = colors.ylw + 'Exiting...' + colors.rst
+	extng = colors.ylw + 'Thank you for using LNX_Tshoot!' + '\n' + 'Exiting...' + colors.rst
 	autfl = colors.ylw + 'Authentication Failed: Please check username and password.' + colors.rst
 	confl = colors.ylw + 'Connection Refused: Unable to connect to port 22 on ' + colors.rst
 
@@ -50,10 +50,10 @@ options = ['Show System Information.', 'Show Linux Kernel Version.', 'Show OS Ve
 	'Check for a string in /var/log/messages:', 'Trace Address:', 'Ping Address:']
 def menu():
 	time.sleep(1)
-	print(colors.blu + '-' * 46)
+	print(colors.blu + '-' * 45)
 	for number,option in enumerate(options, 1):
 		print(number, option)
-	print('-' * 46 + colors.rst)
+	print('-' * 45 + colors.rst)
 
 def clear():
 	os.system('clear')
@@ -112,16 +112,16 @@ def main():
 					print(colors.red + 'Linux Command: ' + colors.blu + command + colors.rst)
 					stdin,stdout,stderr = ssh.exec_command(command)
 					type(stdin)
-					print(colors.cyn + stdout.read() + colors.rst)
+					print(colors.cyn + stdout.read()[:-1] + colors.rst)
 				except (NameError, SyntaxError):
 					clear()
 					print(messages.invld)
 				except (TypeError):
 					clear()
 					close()
-		except paramiko.AuthenticationException:
+		except (paramiko.AuthenticationException):
 			print(messages.autfl)
-		except paramiko.ssh_exception.NoValidConnectionsError:
+		except (paramiko.ssh_exception.NoValidConnectionsError):
 			print(messages.confl + colors.red + hostname + colors.rst)
 	else:
 		print(colors.red + hostname + messages.fping)
