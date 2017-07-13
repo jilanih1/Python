@@ -23,32 +23,32 @@ class messages():
 	selct = colors.blu + 'Select an option [1-10] or type "exit": ' + colors.rst
 	sping = colors.ylw + ' is pingable, continuing...' + colors.rst
 	fping = colors.ylw + ' is not pingable, please check network connectivity.' + colors.rst
-	prcin = colors.blu + 'Please enter process: ' + colors.rst
-	varin = colors.blu + 'Please enter string to search: ' + colors.rst
-	trcin = colors.blu + 'Please enter address to trace: ' + colors.rst
+	prcin = colors.red + 'Please enter process: ' + colors.rst
+	varin = colors.red + 'Please enter string to search: ' + colors.rst
+	trcin = colors.red + 'Please enter address to trace: ' + colors.rst
 	invld = colors.ylw + 'Invalid option selected. Please choose from the following:' + colors.rst
 	extng = colors.ylw + 'Thank you for using LNX_Tshoot!' + '\n' + 'Exiting...' + colors.rst
 	autfl = colors.ylw + 'Authentication Failed: Please check username and password.' + colors.rst
 	confl = colors.ylw + 'Connection Refused: Unable to connect to port 22 on ' + colors.rst
 
 class commands():
-	sysi = 'dmidecode -t system'
-	lnxk = 'uname -r'
-	osvr = 'cat /etc/*-release | (head -n1)'
+	sysi = 'dmidecode -t system' #Needs root access on remote host.
+	lnxk = 'uname -srv' #Kernel -s = name, -r = release, -v = version.
+	osvr = 'cat /etc/*-release | head -n1' #'head -n1' shows only the first line.
 	uptm = 'uptime'
-	free = 'free'
-	dfsk = 'df -k'
-	neti = 'ifconfig'
-	proc = 'ps -ef | grep -v grep | grep -i '
+	free = 'free -h' #-h for human-readable.
+	dfsk = 'df -h'
+	neti = 'ifconfig' #shows only interfaces currently in use.
+	proc = 'ps -ef | grep -v grep | grep -i ' #'grep -v grep' ommits grep process from output.
 	varm = 'cat /var/log/messages | grep -i '
-	trcr = 'traceroute '
+	trcr = 'traceroute ' #May take a long time (and fail) for external addresses (due to firewalls).
 
 #Defines functions to call menu, clear screen & exit:
 options = ['Show System Information.', 'Show Linux Kernel Version.', 'Show OS Version.', 'Show System Uptime.', 
-	'Show Memory Usage.', 'Show Filesystems', 'Show Network Interfaces.', 'Check Process:', 
+	'Show Memory Usage.', 'Show Filesystems.', 'Show Network Interfaces.', 'Check Process:', 
 	'Check for a string in /var/log/messages:', 'Trace Address:']
 def menu():
-	time.sleep(1)
+	time.sleep(.5)
 	print(colors.blu + '-' * 45)
 	for number,option in enumerate(options, 1):
 		print(number, option)
@@ -59,7 +59,7 @@ def clear():
 
 def close():
 	print(messages.extng)
-	time.sleep(1)
+	time.sleep(.5)
 	ssh.close()
 	sys.exit()
 
@@ -69,6 +69,7 @@ def close():
 #If the incorrect password is entered or sshd service is not running paramiko throws
 # exceptions and error messages are displayed.
 def main():
+	clear()
 	pinghost = subprocess.Popen(['ping', '-c', '3', hostname],stdout=subprocess.PIPE)
 	stdout, stderr = pinghost.communicate()
 	if pinghost.returncode == 0:
@@ -110,7 +111,7 @@ def main():
 					print(colors.red + 'Linux Command: ' + colors.blu + command + colors.rst)
 					stdin,stdout,stderr = ssh.exec_command(command)
 					type(stdin)
-					print(colors.cyn + stdout.read()[:-1] + colors.rst)
+					print(colors.cyn + stdout.read()[:-1] + colors.rst) #[:-1]del extra line.
 				except (NameError, SyntaxError):
 					clear()
 					print(messages.invld)
