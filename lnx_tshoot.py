@@ -30,6 +30,7 @@ class messages():
 	extng = colors.ylw + 'Thank you for using LNX_Tshoot!' + '\n' + 'Exiting...' + colors.rst
 	autfl = colors.ylw + 'Authentication Failed: Please check username and password.' + colors.rst
 	confl = colors.ylw + 'Connection Refused: Unable to connect to port 22 on ' + colors.rst
+	sshfl = colors.ylw + 'SSH session was terminated unexpectedly.' + colors.rst
 
 class commands():
 	sysi = 'dmidecode -t system' #Needs root access on remote host.
@@ -109,8 +110,12 @@ def main():
 						print(messages.invld)
 					clear()
 					print(colors.red + 'Linux Command: ' + colors.blu + command + colors.rst)
-					stdin,stdout,stderr = ssh.exec_command(command)
-					type(stdin)
+					try: #if ssh session from remote node is terminated while script is running.
+						stdin,stdout,stderr = ssh.exec_command(command)
+						type(stdin)
+					except (paramiko.ssh_exception.SSHException):
+						print(messages.sshfl)
+						close()
 					print(colors.cyn + stdout.read()[:-1] + colors.rst) #[:-1]del extra line.
 				except (NameError, SyntaxError):
 					clear()
