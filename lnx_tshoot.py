@@ -26,7 +26,7 @@ class messages():
 	prcin = colors.blu + 'Please enter process: ' + colors.rst
 	varin = colors.blu + 'Please enter string to search: ' + colors.rst
 	trcin = colors.blu + 'Please enter address to trace: ' + colors.rst
-	invld = colors.red + 'Invalid option selected. Please choose from the following:' + colors.rst
+	invld = colors.ylw + 'Invalid option selected. Please choose from the following:' + colors.rst
 	extng = colors.ylw + 'Thank you for using LNX_Tshoot!' + '\n' + 'Exiting...' + colors.rst
 	autfl = colors.ylw + 'Authentication Failed: Please check username and password.' + colors.rst
 	confl = colors.ylw + 'Connection Refused: Unable to connect to port 22 on ' + colors.rst
