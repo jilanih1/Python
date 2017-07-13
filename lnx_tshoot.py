@@ -26,7 +26,6 @@ class messages():
 	prcin = colors.blu + 'Please enter process: ' + colors.rst
 	varin = colors.blu + 'Please enter string to search: ' + colors.rst
 	trcin = colors.blu + 'Please enter address to trace: ' + colors.rst
-	pngin = colors.blu + 'Please enter address to ping: ' + colors.rst
 	invld = colors.red + 'Invalid option selected. Please choose from the following:' + colors.rst
 	extng = colors.ylw + 'Thank you for using LNX_Tshoot!' + '\n' + 'Exiting...' + colors.rst
 	autfl = colors.ylw + 'Authentication Failed: Please check username and password.' + colors.rst
@@ -38,16 +37,16 @@ class commands():
 	osvr = 'cat /etc/*-release | (head -n1)'
 	uptm = 'uptime'
 	free = 'free'
+	dfsk = 'df -k'
 	neti = 'ifconfig'
 	proc = 'ps -ef | grep -v grep | grep -i '
 	varm = 'cat /var/log/messages | grep -i '
 	trcr = 'traceroute '
-	pngh = 'ping -c3 '
 
 #Defines functions to call menu, clear screen & exit:
 options = ['Show System Information.', 'Show Linux Kernel Version.', 'Show OS Version.', 'Show System Uptime.', 
-	'Show Memory Usage.', 'Show Network Interfaces.', 'Check Process:', 
-	'Check for a string in /var/log/messages:', 'Trace Address:', 'Ping Address:']
+	'Show Memory Usage.', 'Show Filesystems', 'Show Network Interfaces.', 'Check Process:', 
+	'Check for a string in /var/log/messages:', 'Trace Address:']
 def menu():
 	time.sleep(1)
 	print(colors.blu + '-' * 45)
@@ -91,19 +90,18 @@ def main():
 					elif choice == 5:
 						command = commands.free
 					elif choice == 6:
-						command = commands.neti
+						command = commands.dfsk
 					elif choice == 7:
+						command = commands.neti
+					elif choice == 8:
 						var = raw_input(messages.prcin)
 						command = commands.proc + var
-					elif choice == 8:
+					elif choice == 9:
 						var = raw_input(messages.varin)
 						command = commands.varm + var
-					elif choice == 9:
+					elif choice == 10:
 						var = raw_input(messages.trcin)
 						command = commands.trcr + var
-					elif choice == 10:
-						var = raw_input(messages.pngin)
-						command = commands.pngh + var
 					else:
 						clear()
 						command = null
