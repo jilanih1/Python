@@ -18,8 +18,8 @@ class colors():
 	rst = '\033[0m'
 
 class messages():
-	nohst = colors.blu + 'no hostname specified, please enter hostname: ' + colors.rst
-	nousr = colors.blu + 'no username specified, please enter username: ' + colors.rst
+	nohst = colors.blu + 'No hostname specified, please enter hostname: ' + colors.rst
+	nousr = colors.blu + 'No username specified, please enter username: ' + colors.rst
 	selct = colors.blu + 'Select an option [1-10] or type "exit": ' + colors.rst
 	sping = colors.ylw + ' is pingable, continuing...' + colors.rst
 	fping = colors.ylw + ' is not pingable, please check network connectivity.' + colors.rst
@@ -40,14 +40,14 @@ class commands():
 	free = 'free -h' #-h for human-readable.
 	dfsk = 'df -h'
 	neti = 'ifconfig' #shows only interfaces currently in use.
-	proc = 'ps -ef | grep -v grep | grep -i ' #'grep -v grep' ommits grep process from output.
+	proc = 'ps -ef | grep -v grep | egrep -i "uid|' #'grep -v grep' ommits grep process from output.
 	varm = 'cat /var/log/messages | grep -i '
-	trcr = 'traceroute ' #May take a long time (and fail) for external addresses (due to firewalls).
+	trcr = 'traceroute ' #May take a long time (and fail) for external addresses.
 
 #Defines functions to call menu, clear screen & exit:
 options = ['Show System Information.', 'Show Linux Kernel Version.', 'Show OS Version.', 'Show System Uptime.', 
-	'Show Memory Usage.', 'Show Filesystems.', 'Show Network Interfaces.', 'Check Process:', 
-	'Check for a string in /var/log/messages:', 'Trace Address:']
+	'Show Memory Usage.', 'Show Filesystems.', 'Show Network Interfaces.', 'Show Process:', 
+	'Serach for a string in /var/log/messages:', 'Trace Address:']
 def menu():
 	time.sleep(.5)
 	print(colors.blu + '-' * 45)
@@ -97,7 +97,7 @@ def main():
 						command = commands.neti
 					elif choice == 8:
 						var = raw_input(messages.prcin)
-						command = commands.proc + var
+						command = commands.proc + var + '"'
 					elif choice == 9:
 						var = raw_input(messages.varin)
 						command = commands.varm + var
@@ -147,7 +147,7 @@ else:
 	username = args.username
 
 #Hides password input:
-password = getpass.getpass(colors.blu + '' + username + '@' + hostname + ' password: ' + colors.rst)
+password = getpass.getpass(colors.blu + '' + username + '@' + hostname + "'s" + ' password: ' + colors.rst)
 
 if __name__ == '__main__':
 	main()
