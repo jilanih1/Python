@@ -69,7 +69,27 @@ def close():
 #Lets the user choose a command to run.
 #If the incorrect password is entered or sshd service is not running paramiko throws
 # exceptions and error messages are displayed.
-def main():
+if __name__ == '__main__':
+
+	#Allows script to be run with hostname and username options:
+	parser = argparse.ArgumentParser(usage='lnx_tshoot.py -s <hostname> -u <username>')
+	parser.add_argument('-s', '--hostname', help='Specify hostname to ssh into.')
+	parser.add_argument('-u', '--username', help='Enter username.')
+	args = parser.parse_args()
+
+	#If no option is selected for hostname and username, allows it to be entered via input:
+	if not args.hostname:
+		hostname = raw_input(messages.nohst)
+	else:
+		hostname = args.hostname
+	if not args.username:
+		username = raw_input(messages.nousr)
+	else:
+		username = args.username
+
+	#Hides password input:
+	password = getpass.getpass(colors.blu + '' + username + '@' + hostname + "'s" + ' password: ' + colors.rst)
+
 	clear()
 	pinghost = subprocess.Popen(['ping', '-c', '3', hostname],stdout=subprocess.PIPE)
 	stdout, stderr = pinghost.communicate()
@@ -130,25 +150,4 @@ def main():
 	else:
 		print(colors.red + hostname + messages.fping)
 
-#Allows script to be run with hostname and username options:
-parser = argparse.ArgumentParser(usage='lnx_tshoot.py -s <hostname> -u <username>')
-parser.add_argument('-s', '--hostname', help='Specify hostname to ssh into.')
-parser.add_argument('-u', '--username', help='Enter username.')
-args = parser.parse_args()
-
-#If no option is selected for hostname and username, allows it to be entered via input:
-if not args.hostname:
-	hostname = raw_input(messages.nohst)
-else:
-	hostname = args.hostname
-if not args.username:
-	username = raw_input(messages.nousr)
-else:
-	username = args.username
-
-#Hides password input:
-password = getpass.getpass(colors.blu + '' + username + '@' + hostname + "'s" + ' password: ' + colors.rst)
-
-if __name__ == '__main__':
-	main()
 close()
