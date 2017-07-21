@@ -64,11 +64,6 @@ def close():
 	ssh.close()
 	sys.exit()
 
-#Defines main function:
-#If host is pingable, tries to connect to host. Displays the menu.
-#Lets the user choose a command to run.
-#If the incorrect password is entered or sshd service is not running paramiko throws
-# exceptions and error messages are displayed.
 if __name__ == '__main__':
 
 	#Allows script to be run with hostname and username options:
