@@ -19,20 +19,24 @@ class info():
 	fafile = 'File not found. Please check filename and path, exiting...'
 	pingsu = ' is pingable'
 	pingfl = ' is not pingable'
+	errarg = 'Too many arguments. Please select a file: '
 
-if len(sys.argv) > 1:
-	hfile = sys.argv[1]
-else:
-	hfile = input(colors.Red + info.nofile + colors.Reset)
+if __name__ == '__main__':
 
-#Checks if the argument provided is valid
-if os.path.isfile(hfile):
-	print(colors.Green + hfile + info.vafile + colors.Reset)
-else:
-	print(colors.Red + info.fafile + colors.Reset)
-	sys.exit(1)
+	if len(sys.argv) == 2:
+		hfile = sys.argv[1]
+	elif len(sys.argv) == 1:
+		hfile = input(colors.Red + info.nofile + colors.Reset)
+	else:
+		hfile = input(colors.Red + info.errarg + colors.Reset)
 
-def main():
+	#Checks if the argument provided is valid
+	if os.path.isfile(hfile):
+		print(colors.Green + hfile + info.vafile + colors.Reset)
+	else:
+		print(colors.Red + info.fafile + colors.Reset)
+		sys.exit(1)
+
 	#Opens the file and adds the entries to a list
 	with open(hfile, 'r') as hosts:
 		hostlist = [line.strip() for line in hosts]
@@ -45,9 +49,6 @@ def main():
 			print(colors.Green + ip + info.pingsu + colors.Reset)
 		else:
 			print(colors.Red + ip + info.pingfl + colors.Reset)
-
-if __name__ == '__main__':
-	main()
 sys.exit(0)
 
 ### NOTE: Hosts should be listed in the file as following (Without #) ###
